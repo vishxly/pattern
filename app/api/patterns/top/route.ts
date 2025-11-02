@@ -3,6 +3,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getUserIdentifier } from '@/lib/user-identifier';
 
+// Define or import PatternType
+type PatternType = 'background' | 'button';
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -22,7 +25,7 @@ export async function GET(request: NextRequest) {
     // Get top patterns by like count
     const topPatterns = await prisma.patternLikeCount.findMany({
       where: {
-        patternType,
+        patternType: patternType as PatternType,
         likeCount: {
           gt: 0,
         },
@@ -41,7 +44,7 @@ export async function GET(request: NextRequest) {
     const patternIds = topPatterns.map((p) => p.patternId);
     const userLikes = await prisma.patternLike.findMany({
       where: {
-        patternType,
+        patternType: patternType as PatternType,
         userIdentifier,
         patternId: {
           in: patternIds,

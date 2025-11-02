@@ -6,7 +6,7 @@ import { getUserIdentifier } from '@/lib/user-identifier';
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    const patternType = searchParams.get('patternType') || 'background';
+    const patternType = (searchParams.get('patternType') || 'background') as 'background' | 'button';
 
     if (!['background', 'button'].includes(patternType)) {
       return NextResponse.json(
