@@ -1,0 +1,38 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model PatternLike {
+  id              Int      @id @default(autoincrement())
+  patternId       String   @map("pattern_id")
+  patternType     PatternType @map("pattern_type")
+  userIdentifier  String   @map("user_identifier")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@unique([patternId, patternType, userIdentifier])
+  @@index([userIdentifier])
+  @@index([patternId, patternType])
+  @@map("pattern_likes")
+}
+
+model PatternLikeCount {
+  patternId    String      @map("pattern_id")
+  patternType  PatternType @map("pattern_type")
+  likeCount    Int         @default(0) @map("like_count")
+  lastUpdated  DateTime    @default(now()) @updatedAt @map("last_updated")
+
+  @@id([patternId, patternType])
+  @@index([likeCount(sort: Desc)])
+  @@map("pattern_like_counts")
+}
+
+enum PatternType {
+  background
+  button
+}
