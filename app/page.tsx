@@ -403,7 +403,9 @@ export default function PatternLibrary() {
             {/* Like Button */}
             <div className="absolute top-0 left-0 z-20">
               <button
-                onClick={(e) => handleLikeClick(e, String(getCurrentPattern().id))}
+                onClick={(e) =>
+                  handleLikeClick(e, String(getCurrentPattern().id))
+                }
                 className={`group/like flex items-center gap-1.5 backdrop-blur-md rounded-full px-3 py-1.5 transition-all duration-300 border ${
                   getLikeData(String(getCurrentPattern().id)).isLiked
                     ? "bg-red-500/20 border-red-400/40 hover:bg-red-500/30 shadow-lg shadow-red-500/20"
@@ -418,9 +420,13 @@ export default function PatternLibrary() {
                       : "text-white/90 group-hover/like:text-red-400 group-hover/like:scale-110"
                   }`}
                 />
-                <span className={`text-sm font-semibold transition-colors ${
-                  getLikeData(String(getCurrentPattern().id)).isLiked ? "text-red-100" : "text-white/90"
-                }`}>
+                <span
+                  className={`text-sm font-semibold transition-colors ${
+                    getLikeData(String(getCurrentPattern().id)).isLiked
+                      ? "text-red-100"
+                      : "text-white/90"
+                  }`}
+                >
                   {getLikeData(String(getCurrentPattern().id)).count}
                 </span>
               </button>
@@ -429,10 +435,11 @@ export default function PatternLibrary() {
             {/* Copy Button - Top Right */}
             <div className="absolute top-0 right-0 z-20 flex items-center gap-2">
               {getCurrentPattern().isNew && (
-                <span className="bg-gradient-to-r from-pink-500 to-violet-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+                <span className="bg-gray-800 text-white text-xs font-medium px-3 py-1.5 rounded-full shadow-sm">
                   ✨ New
                 </span>
               )}
+
               <button
                 onClick={() =>
                   copyToClipboard(
@@ -448,7 +455,9 @@ export default function PatternLibrary() {
               >
                 <Copy className="w-4 h-4" />
                 <span className="hidden sm:inline">
-                  {copiedId === String(getCurrentPattern().id) ? "Copied!" : "Copy"}
+                  {copiedId === String(getCurrentPattern().id)
+                    ? "Copied!"
+                    : "Copy"}
                 </span>
               </button>
             </div>
@@ -463,7 +472,8 @@ export default function PatternLibrary() {
             </h1>
 
             <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-6 sm:mb-8 max-w-3xl mx-auto leading-relaxed px-4 drop-shadow-md">
-              Beautiful backgrounds and buttons. Copy, paste, and customize for your next project.
+              Beautiful backgrounds and buttons. Copy, paste, and customize for
+              your next project.
             </p>
 
             {patternType === "button" && (
@@ -530,7 +540,7 @@ export default function PatternLibrary() {
             >
               All
             </button>
-            
+
             {/* Top Liked Button */}
             <button
               onClick={() => handleCategoryChange("favourites")}
@@ -583,8 +593,6 @@ export default function PatternLibrary() {
                   onMouseEnter={() => setHoveredPattern(String(pattern.id))}
                   onMouseLeave={() => setHoveredPattern(null)}
                 >
-
-
                   <div
                     className={`aspect-square rounded-xl sm:rounded-2xl cursor-pointer transition-all duration-500 transform relative overflow-hidden ${
                       getCurrentPattern().id === pattern.id
@@ -645,9 +653,11 @@ export default function PatternLibrary() {
                               : "text-white/90 group-hover/like:text-red-400 group-hover/like:scale-110"
                           }`}
                         />
-                        <span className={`text-sm font-semibold transition-colors ${
-                          likeData.isLiked ? "text-red-100" : "text-white/90"
-                        }`}>
+                        <span
+                          className={`text-sm font-semibold transition-colors ${
+                            likeData.isLiked ? "text-red-100" : "text-white/90"
+                          }`}
+                        >
                           {likeData.count}
                         </span>
                       </button>
