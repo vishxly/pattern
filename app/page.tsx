@@ -435,7 +435,7 @@ export default function PatternLibrary() {
             {/* Copy Button - Top Right */}
             <div className="absolute top-0 right-0 z-20 flex items-center gap-2">
               {getCurrentPattern().isNew && (
-                <span className="bg-gray-800 text-white text-xs font-medium px-3 py-1.5 rounded-full shadow-sm">
+                <span className="bg-neutral-800 text-white text-xs font-medium px-3 py-1.5 rounded-full shadow-sm">
                   ✨ New
                 </span>
               )}
