@@ -9,6 +9,7 @@ import {
   Palette,
   MousePointer,
   Trophy,
+  Check,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -300,13 +301,6 @@ export default function PatternLibrary() {
     }
   };
 
-  const filteredPatterns = getFilteredPatterns();
-
-  const currentCategories =
-    patternType === "background" ? categories : buttonCategories;
-  const currentActiveCategory =
-    patternType === "background" ? activeCategory : activeButtonCategory;
-
   const getCurrentBackground = (): React.CSSProperties => {
     return getMainBackgroundStyle(selectedPattern);
   };
@@ -389,153 +383,165 @@ export default function PatternLibrary() {
     return index !== -1 ? index + 1 : null;
   };
 
+  const filteredPatterns = getFilteredPatterns();
+
+  const currentCategories =
+    patternType === "background" ? categories : buttonCategories;
+  const currentActiveCategory =
+    patternType === "background" ? activeCategory : activeButtonCategory;
+
   return (
     <div
-      className="min-h-screen w-full relative"
+      className="min-h-screen w-full relative overflow-x-hidden"
       style={getCurrentBackground()}
     >
       {renderMainBackgroundOverlay(selectedPattern)}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40 pointer-events-none" />
 
       <div className="relative z-10">
-        {/* Hero Section with Pattern Background */}
-        <div className="container mx-auto px-4 pt-8 sm:pt-12 pb-12 sm:pb-16 max-w-7xl relative">
+        {/* Hero Section */}
+        <div className="container mx-auto px-4 pt-6 lg:pt-12 pb-20 max-w-7xl">
           <div className="text-center max-w-5xl mx-auto relative">
-            {/* Like Button */}
-            <div className="absolute top-0 left-0 z-20">
+            {/* Floating Action Buttons */}
+            <div className="absolute top-0 left-0 right-0 flex flex-col sm:flex-row justify-between items-start sm:items-start gap-3 sm:gap-0 z-20 px-2 sm:px-0">
               <button
                 onClick={(e) =>
                   handleLikeClick(e, String(getCurrentPattern().id))
                 }
-                className={`group/like flex items-center gap-1.5 backdrop-blur-md rounded-full px-3 py-1.5 transition-all duration-300 border ${
+                className={`group flex items-center gap-2 backdrop-blur-xl rounded-2xl px-3 sm:px-4 py-2 transition-all duration-500 border-2 hover:scale-110 text-sm ${
                   getLikeData(String(getCurrentPattern().id)).isLiked
-                    ? "bg-red-500/20 border-red-400/40 hover:bg-red-500/30 shadow-lg shadow-red-500/20"
-                    : "bg-white/10 border-white/20 hover:bg-white/20 hover:border-white/30"
+                    ? "bg-gradient-to-r from-red-500/30 to-pink-500/30 border-red-400/50 shadow-xl shadow-red-500/30"
+                    : "bg-white/10 border-white/20 hover:bg-white/20 hover:border-white/30 hover:shadow-xl"
                 }`}
                 disabled={likesLoading}
               >
                 <Heart
-                  className={`w-5 h-5 transition-all duration-300 ${
+                  className={`w-4 h-4 sm:w-5 sm:h-5 transition-all duration-300 ${
                     getLikeData(String(getCurrentPattern().id)).isLiked
-                      ? "fill-red-500 text-red-500 scale-110"
-                      : "text-white/90 group-hover/like:text-red-400 group-hover/like:scale-110"
+                      ? "fill-red-500 text-red-500 animate-pulse"
+                      : "text-white/90 group-hover:text-red-400"
                   }`}
                 />
-                <span
-                  className={`text-sm font-semibold transition-colors ${
-                    getLikeData(String(getCurrentPattern().id)).isLiked
-                      ? "text-red-100"
-                      : "text-white/90"
-                  }`}
-                >
+                <span className="text-xs sm:text-sm font-bold text-white">
                   {getLikeData(String(getCurrentPattern().id)).count}
                 </span>
               </button>
-            </div>
 
-            {/* Copy Button - Top Right */}
-            <div className="absolute top-0 right-0 z-20 flex items-center gap-2">
-              {getCurrentPattern().isNew && (
-                <span className="bg-neutral-800 text-white text-xs font-medium px-3 py-1.5 rounded-full shadow-sm">
-                  ✨ New
-                </span>
-              )}
+              <div className="hidden sm:flex items-center gap-2 sm:gap-3 flex-wrap">
+                {getCurrentPattern().isNew && (
+                  <div className="bg-gradient-to-r from-yellow-400/20 to-orange-400/20 backdrop-blur-xl border-2 border-yellow-400/30 text-white text-xs font-bold px-3 sm:px-4 py-2 rounded-2xl shadow-xl flex items-center gap-1.5 sm:gap-2">
+                    <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" />
+                    NEW
+                  </div>
+                )}
 
-              <button
-                onClick={() =>
-                  copyToClipboard(
-                    getCurrentCode(),
-                    String(getCurrentPattern().id)
-                  )
-                }
-                className={`flex items-center gap-1.5 backdrop-blur-md text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all duration-300 font-medium text-xs sm:text-sm shadow-lg ${
-                  copiedId === String(getCurrentPattern().id)
-                    ? "bg-green-500/30 hover:bg-green-500/40 border border-green-400/50"
-                    : "bg-white/20 hover:bg-white/30 border border-white/30 hover:scale-105"
-                }`}
-              >
-                <Copy className="w-4 h-4" />
-                <span className="hidden sm:inline">
-                  {copiedId === String(getCurrentPattern().id)
-                    ? "Copied!"
-                    : "Copy"}
-                </span>
-              </button>
-            </div>
-
-            <Badge className="mb-4 sm:mb-6 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-white text-xs sm:text-sm font-medium bg-white/10 backdrop-blur-md border border-white/20 shadow-lg">
-              <Sparkles className="w-3 sm:w-4 h-3 sm:h-4 mr-2" />
-              Currently Viewing: {getCurrentPattern().name}
-            </Badge>
-
-            <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold text-white mb-4 sm:mb-6 leading-tight tracking-tight px-4 drop-shadow-lg">
-              Pattern Library
-            </h1>
-
-            <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-6 sm:mb-8 max-w-3xl mx-auto leading-relaxed px-4 drop-shadow-md">
-              Beautiful backgrounds and buttons. Copy, paste, and customize for
-              your next project.
-            </p>
-
-            {patternType === "button" && (
-              <div className="flex flex-col items-center justify-center gap-4 sm:gap-6">
                 <button
-                  className={`${extractClassName(
-                    selectedButtonPattern.getStartedCode
-                  )} pointer-events-none text-sm sm:text-base shadow-xl`}
+                  onClick={() =>
+                    copyToClipboard(
+                      getCurrentCode(),
+                      String(getCurrentPattern().id)
+                    )
+                  }
+                  className={`flex items-center gap-1.5 sm:gap-2 backdrop-blur-xl text-white px-3 sm:px-5 py-2 rounded-2xl transition-all duration-500 font-bold text-xs sm:text-sm shadow-xl border-2 hover:scale-110 ${
+                    copiedId === String(getCurrentPattern().id)
+                      ? "bg-gradient-to-r from-green-500/30 to-emerald-500/30 border-green-400/50 shadow-green-500/30"
+                      : "bg-white/10 border-white/30 hover:bg-white/20"
+                  }`}
                 >
-                  Get Started
-                </button>
-                <button
-                  className={`${extractClassName(
-                    selectedButtonPattern.exploreCode
-                  )} pointer-events-none text-sm sm:text-base shadow-xl`}
-                >
-                  Explore
+                  {copiedId === String(getCurrentPattern().id) ? (
+                    <>
+                      <Check className="w-3 h-3 sm:w-4 sm:h-4" />
+                      Copied!
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3 h-3 sm:w-4 sm:h-4" />
+                      Copy
+                    </>
+                  )}
                 </button>
               </div>
-            )}
+            </div>
+
+            {/* Main Heading */}
+            <div className="mt-8">
+              <div className="inline-flex items-center gap-2 mb-6 px-3 sm:px-5 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl max-w-[90%] sm:max-w-none">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse flex-shrink-0" />
+                <span className="text-white/90 text-xs sm:text-sm font-medium truncate">
+                  Currently Viewing: {getCurrentPattern().name}
+                </span>
+              </div>
+
+              <h1 className="text-4xl sm:text-6xl md:text-8xl font-black text-white mb-4 sm:mb-6 leading-none tracking-tight px-2">
+                <span className="bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent drop-shadow-2xl">
+                  Pattern Library
+                </span>
+              </h1>
+
+              <p className="text-base sm:text-xl md:text-2xl text-white/80 mb-10 max-w-3xl mx-auto leading-relaxed font-light px-4">
+                Beautiful backgrounds and buttons. Copy, paste, and customize
+                for your next project.
+              </p>
+
+              {patternType === "button" && (
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-12 px-4">
+                  <button
+                    className={`${extractClassName(
+                      selectedButtonPattern.getStartedCode
+                    )} pointer-events-none shadow-2xl transform hover:scale-105 transition-transform text-sm sm:text-base w-full sm:w-auto max-w-[200px]`}
+                  >
+                    Get Started
+                  </button>
+                  <button
+                    className={`${extractClassName(
+                      selectedButtonPattern.exploreCode
+                    )} pointer-events-none shadow-2xl transform hover:scale-105 transition-transform text-sm sm:text-base w-full sm:w-auto max-w-[200px]`}
+                  >
+                    Explore
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Pattern Type Toggle */}
-        <div className="flex justify-center mb-6 sm:mb-8 px-4">
-          <div className="flex gap-1 sm:gap-2 bg-black/20 backdrop-blur-md rounded-xl sm:rounded-2xl p-1 sm:p-2 border border-white/10 shadow-2xl w-full max-w-md sm:max-w-none sm:w-auto">
+        <div className="flex justify-center mb-12 px-4">
+          <div className="inline-flex gap-2 bg-black/30 backdrop-blur-xl rounded-3xl p-2 border-2 border-white/10 shadow-2xl w-full sm:w-auto max-w-md">
             <button
               onClick={() => setPatternType("background")}
-              className={`flex items-center gap-2 px-3 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-300 text-sm sm:text-base flex-1 sm:flex-none ${
+              className={`flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold transition-all duration-500 flex-1 sm:flex-none text-sm sm:text-base ${
                 patternType === "background"
-                  ? "bg-white/20 text-white shadow-lg backdrop-blur-md scale-105"
-                  : "text-white/70 hover:text-white hover:bg-white/10 hover:scale-105"
+                  ? "bg-white/20 text-white shadow-2xl scale-105"
+                  : "text-white/60 hover:text-white hover:bg-white/10"
               }`}
             >
-              <Palette className="w-4 h-4" />
-              <span className="hidden sm:inline">Background Patterns</span>
-              <span className="sm:hidden">Backgrounds</span>
+              <Palette className="w-4 h-4 sm:w-5 sm:h-5" />
+              Backgrounds
             </button>
             <button
               onClick={() => setPatternType("button")}
-              className={`flex items-center gap-2 px-3 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-300 text-sm sm:text-base flex-1 sm:flex-none ${
+              className={`flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold transition-all duration-500 flex-1 sm:flex-none text-sm sm:text-base ${
                 patternType === "button"
-                  ? "bg-white/20 text-white shadow-lg backdrop-blur-md scale-105"
-                  : "text-white/70 hover:text-white hover:bg-white/10 hover:scale-105"
+                  ? "bg-white/20 text-white shadow-2xl scale-105"
+                  : "text-white/60 hover:text-white hover:bg-white/10"
               }`}
             >
-              <MousePointer className="w-4 h-4" />
-              <span className="hidden sm:inline">Button Patterns</span>
-              <span className="sm:hidden">Buttons</span>
+              <MousePointer className="w-4 h-4 sm:w-5 sm:h-5" />
+              Buttons
             </button>
           </div>
         </div>
 
         {/* Category Navigation */}
-        <div className="flex justify-center mb-12 sm:mb-16 px-4">
-          <div className="flex flex-wrap gap-2 sm:gap-3 bg-black/20 backdrop-blur-md rounded-xl sm:rounded-2xl p-2 sm:p-3 border border-white/10 shadow-2xl max-w-full overflow-x-auto">
+        <div className="flex justify-center mb-16 px-4">
+          <div className="inline-flex flex-wrap gap-3 bg-black/30 backdrop-blur-xl rounded-3xl p-3 border-2 border-white/10 shadow-2xl max-w-4xl">
             <button
               onClick={() => handleCategoryChange(null)}
-              className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-300 text-sm sm:text-base whitespace-nowrap ${
+              className={`px-6 py-3 rounded-2xl font-bold transition-all duration-500 whitespace-nowrap ${
                 currentActiveCategory === null
-                  ? "bg-white/20 text-white shadow-lg backdrop-blur-md scale-105"
-                  : "text-white/70 hover:text-white hover:bg-white/10 hover:scale-105"
+                  ? "bg-white/20 text-white shadow-2xl scale-105"
+                  : "text-white/60 hover:text-white hover:bg-white/10 hover:scale-105"
               }`}
             >
               All
@@ -544,10 +550,10 @@ export default function PatternLibrary() {
             {/* Top Liked Button */}
             <button
               onClick={() => handleCategoryChange("favourites")}
-              className={`flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-300 text-sm sm:text-base whitespace-nowrap ${
+              className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-bold transition-all duration-500 whitespace-nowrap ${
                 currentActiveCategory === "favourites"
-                  ? "bg-gradient-to-r from-yellow-500/30 to-orange-500/30 text-white shadow-lg backdrop-blur-md scale-105 border border-yellow-400/50"
-                  : "text-white/70 hover:text-white hover:bg-white/10 hover:scale-105"
+                  ? "bg-gradient-to-r from-yellow-500/30 to-orange-500/30 text-white shadow-2xl scale-105 border-2 border-yellow-400/50"
+                  : "text-white/60 hover:text-white hover:bg-white/10 hover:scale-105"
               }`}
             >
               <Trophy className="w-4 h-4" />
@@ -560,10 +566,10 @@ export default function PatternLibrary() {
                 <button
                   key={category.id}
                   onClick={() => handleCategoryChange(category.id)}
-                  className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-300 text-sm sm:text-base whitespace-nowrap ${
+                  className={`px-6 py-3 rounded-2xl font-bold transition-all duration-500 whitespace-nowrap ${
                     currentActiveCategory === category.id
-                      ? "bg-white/20 text-white shadow-lg backdrop-blur-md scale-105"
-                      : "text-white/70 hover:text-white hover:bg-white/10 hover:scale-105"
+                      ? "bg-white/20 text-white shadow-2xl scale-105"
+                      : "text-white/60 hover:text-white hover:bg-white/10 hover:scale-105"
                   }`}
                 >
                   {category.name}
@@ -580,11 +586,10 @@ export default function PatternLibrary() {
         )}
 
         {/* Pattern Grid */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-20">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+        <div className="max-w-7xl mx-auto px-4 pb-20">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredPatterns.map((pattern) => {
               const likeData = getLikeData(String(pattern.id));
-              const rank = getPatternRank(String(pattern.id));
 
               return (
                 <div
@@ -594,10 +599,10 @@ export default function PatternLibrary() {
                   onMouseLeave={() => setHoveredPattern(null)}
                 >
                   <div
-                    className={`aspect-square rounded-xl sm:rounded-2xl cursor-pointer transition-all duration-500 transform relative overflow-hidden ${
+                    className={`aspect-square rounded-3xl cursor-pointer transition-all duration-500 transform relative overflow-hidden border-2 ${
                       getCurrentPattern().id === pattern.id
-                        ? "ring-2 sm:ring-4 ring-white/50 scale-105 sm:scale-110 shadow-2xl"
-                        : "hover:scale-105 hover:shadow-xl"
+                        ? "ring-4 ring-white/50 ring-offset-4 ring-offset-transparent scale-105 shadow-2xl border-white/30"
+                        : "border-white/10 hover:border-white/30 hover:scale-105 hover:shadow-2xl"
                     }`}
                     style={
                       patternType === "background"
@@ -615,11 +620,11 @@ export default function PatternLibrary() {
                       renderComplexPatternPreview(pattern as PatternType)}
 
                     {patternType === "button" && isButtonPattern(pattern) && (
-                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 sm:gap-6 p-4 sm:p-6">
+                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 p-6">
                         <button
                           className={`${extractClassName(
                             pattern.getStartedCode
-                          )} pointer-events-none text-xs sm:text-sm`}
+                          )} pointer-events-none text-sm`}
                           style={{ minWidth: "80px" }}
                         >
                           Get Started
@@ -627,7 +632,7 @@ export default function PatternLibrary() {
                         <button
                           className={`${extractClassName(
                             pattern.exploreCode
-                          )} pointer-events-none text-xs sm:text-sm`}
+                          )} pointer-events-none text-sm`}
                           style={{ minWidth: "70px" }}
                         >
                           Explore
@@ -635,26 +640,26 @@ export default function PatternLibrary() {
                       </div>
                     )}
 
-                    {/* Like Button */}
-                    <div className="absolute top-3 sm:top-4 left-3 sm:left-4 z-30">
+                    {/* Like Badge */}
+                    <div className="absolute top-4 left-4 z-30">
                       <button
                         onClick={(e) => handleLikeClick(e, String(pattern.id))}
-                        className={`group/like flex items-center gap-1.5 backdrop-blur-md rounded-full px-3 py-1.5 transition-all duration-300 border ${
+                        className={`group/like flex items-center gap-2 backdrop-blur-xl rounded-full px-3 py-1.5 transition-all duration-500 border-2 hover:scale-110 ${
                           likeData.isLiked
-                            ? "bg-red-500/20 border-red-400/40 hover:bg-red-500/30 shadow-lg shadow-red-500/20"
-                            : "bg-white/10 border-white/20 hover:bg-white/20 hover:border-white/30"
+                            ? "bg-red-500/30 border-red-400/50 shadow-lg shadow-red-500/30"
+                            : "bg-white/10 border-white/20 hover:bg-white/20"
                         }`}
                         disabled={likesLoading}
                       >
                         <Heart
-                          className={`w-4 sm:w-5 h-4 sm:h-5 transition-all duration-300 ${
+                          className={`w-4 h-4 transition-all duration-300 ${
                             likeData.isLiked
-                              ? "fill-red-500 text-red-500 scale-110"
-                              : "text-white/90 group-hover/like:text-red-400 group-hover/like:scale-110"
+                              ? "fill-red-500 text-red-500"
+                              : "text-white/90 group-hover/like:text-red-400"
                           }`}
                         />
                         <span
-                          className={`text-sm font-semibold transition-colors ${
+                          className={`text-xs font-bold ${
                             likeData.isLiked ? "text-red-100" : "text-white/90"
                           }`}
                         >
@@ -664,33 +669,34 @@ export default function PatternLibrary() {
                     </div>
 
                     {pattern.isNew && (
-                      <div className="absolute top-3 sm:top-4 right-3 sm:right-4 z-10">
-                        <span className="bg-gradient-to-r from-pink-500 to-violet-500 text-white text-xs font-bold px-2 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-lg">
-                          ✨ New
+                      <div className="absolute top-4 right-4 z-10">
+                        <span className="bg-gradient-to-r from-yellow-400/20 to-orange-400/20 backdrop-blur-xl border-2 border-yellow-400/30 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-xl">
+                          ✨ NEW
                         </span>
                       </div>
                     )}
 
+                    {/* Hover Overlay */}
                     <div
-                      className={`absolute inset-0 bg-black/50 rounded-xl sm:rounded-2xl flex flex-col items-center justify-center transition-all duration-300 z-20 ${
+                      className={`absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent rounded-3xl flex flex-col items-center justify-center transition-all duration-500 z-20 ${
                         hoveredPattern === String(pattern.id)
                           ? "opacity-100"
                           : "opacity-0"
                       }`}
                     >
-                      <h3 className="text-white font-semibold text-lg sm:text-xl mb-4 sm:mb-8 text-center px-4">
+                      <h3 className="text-white font-bold text-xl mb-6 text-center px-4">
                         {pattern.name}
                       </h3>
 
-                      <div className="flex gap-2 sm:gap-3 px-4">
+                      <div className="flex gap-3">
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             handlePatternClick(pattern);
                           }}
-                          className="flex items-center gap-1 sm:gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-md text-white px-3 sm:px-5 py-2 sm:py-3 rounded-lg sm:rounded-xl transition-all duration-300 font-medium text-xs sm:text-sm"
+                          className="flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-xl text-white px-5 py-3 rounded-2xl transition-all duration-300 font-bold text-sm border-2 border-white/20 hover:scale-110 shadow-xl"
                         >
-                          <Eye className="w-3 sm:w-4 h-3 sm:h-4" />
+                          <Eye className="w-4 h-4" />
                           Preview
                         </button>
 
@@ -704,21 +710,25 @@ export default function PatternLibrary() {
                               : "";
                             copyToClipboard(code, String(pattern.id));
                           }}
-                          className={`flex items-center gap-1 sm:gap-2 backdrop-blur-md text-white px-3 sm:px-5 py-2 sm:py-3 rounded-lg sm:rounded-xl transition-all duration-300 font-medium text-xs sm:text-sm ${
+                          className={`flex items-center gap-2 backdrop-blur-xl text-white px-5 py-3 rounded-2xl transition-all duration-300 font-bold text-sm border-2 hover:scale-110 shadow-xl ${
                             copiedId === String(pattern.id)
-                              ? "bg-green-500/30 hover:bg-green-500/40"
-                              : "bg-white/20 hover:bg-white/30"
+                              ? "bg-green-500/30 border-green-400/50"
+                              : "bg-white/20 border-white/20 hover:bg-white/30"
                           }`}
                         >
-                          <Copy className="w-3 sm:w-4 h-3 sm:h-4" />
+                          {copiedId === String(pattern.id) ? (
+                            <Check className="w-4 h-4" />
+                          ) : (
+                            <Copy className="w-4 h-4" />
+                          )}
                           {copiedId === String(pattern.id) ? "Copied!" : "Copy"}
                         </button>
                       </div>
                     </div>
                   </div>
 
-                  <div className="mt-3 sm:mt-4 text-center">
-                    <h3 className="text-white font-medium text-base sm:text-lg">
+                  <div className="mt-4 text-center">
+                    <h3 className="text-white font-bold text-lg">
                       {pattern.name}
                     </h3>
                   </div>
@@ -728,12 +738,12 @@ export default function PatternLibrary() {
           </div>
         </div>
 
-        {/* Usage Instructions */}
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-20">
-          <div className="rounded-xl sm:rounded-2xl p-4 sm:p-8 border border-white/10">
+        {/* Code Display */}
+        <div className="max-w-4xl mx-auto px-4 pb-24">
+          <div className="bg-black/40 backdrop-blur-xl rounded-3xl p-8 border-2 border-white/10 shadow-2xl">
             <SyntaxHighlighter code={getCurrentCode()} language="tsx" />
-            <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
-              <p className="text-white/70 text-sm sm:text-base">
+            <div className="mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <p className="text-white/70 text-sm">
                 {patternType === "background"
                   ? 'Simply replace "Your content here" with your actual components'
                   : "Copy the button code and customize the links and text as needed"}
@@ -745,7 +755,7 @@ export default function PatternLibrary() {
                     String(getCurrentPattern().id)
                   )
                 }
-                className="flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-md text-white px-4 py-2 rounded-lg transition-all duration-300 text-sm sm:text-base"
+                className="flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-xl text-white px-6 py-3 rounded-2xl transition-all duration-300 font-bold border-2 border-white/20 hover:scale-105 shadow-xl"
               >
                 <Copy className="w-4 h-4" />
                 Copy Current
@@ -754,16 +764,16 @@ export default function PatternLibrary() {
           </div>
         </div>
 
-        {/* Scroll to Top Button */}
+        {/* Scroll to Top */}
         <button
           onClick={scrollToTop}
-          className={`fixed bottom-20 sm:bottom-6 right-4 sm:right-6 z-30 p-3 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-full border border-white/20 shadow-lg transition-all duration-300 transform ${
+          className={`fixed bottom-8 right-8 z-30 p-4 bg-white/20 hover:bg-white/30 backdrop-blur-xl rounded-2xl border-2 border-white/20 shadow-2xl transition-all duration-500 transform hover:scale-110 ${
             showScrollTop
               ? "translate-y-0 opacity-100"
               : "translate-y-16 opacity-0 pointer-events-none"
           }`}
         >
-          <ChevronUp className="w-5 sm:w-6 h-5 sm:h-6 text-white" />
+          <ChevronUp className="w-6 h-6 text-white" />
         </button>
 
         <div className="h-24 sm:h-32"></div>
