@@ -1246,6 +1246,93 @@ background-size: 80px 60px;`,
   </div>`,
     isNew: true,
   },
+  {
+    id: 53,
+    name: "Quantum Grid",
+    category: "tech",
+    css: `background-color: #0c0c14;
+    background-image: 
+      linear-gradient(rgba(55, 55, 155, 0.2) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(55, 55, 155, 0.2) 1px, transparent 1px),
+      radial-gradient(circle at 30% 30%, rgba(100, 100, 255, 0.1), transparent 30%),
+      radial-gradient(circle at 70% 70%, rgba(255, 100, 100, 0.1), transparent 30%);
+    background-size: 50px 50px, 50px 50px, 100% 100%, 100% 100%;`,
+    preview: "linear-gradient(135deg, #0c0c14 0%, #37379b 50%, #ff6464 100%)",
+    htmlCode: `<div className="min-h-screen w-full relative" 
+       style={{
+         backgroundColor: '#0c0c14',
+         backgroundImage: 'linear-gradient(rgba(55, 55, 155, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(55, 55, 155, 0.2) 1px, transparent 1px), radial-gradient(circle at 30% 30%, rgba(100, 100, 255, 0.1), transparent 30%), radial-gradient(circle at 70% 70%, rgba(255, 100, 100, 0.1), transparent 30%)',
+         backgroundSize: '50px 50px, 50px 50px, 100% 100%, 100% 100%'
+       }}>
+    {/* Your content here */}
+  </div>`,
+    isNew: true,
+    type: "complex",
+  },
+  {
+    id: 54,
+    name: "Retro Waves",
+    category: "waves",
+    css: `background-color: #2a2a4a;
+    background-image: 
+      repeating-linear-gradient(45deg, #3d3d6b 0, #3d3d6b 20px, #2a2a4a 20px, #2a2a4a 40px);`,
+    preview: "linear-gradient(45deg, #2a2a4a, #3d3d6b)",
+    htmlCode: `<div className="min-h-screen w-full relative" 
+       style={{
+         backgroundColor: '#2a2a4a',
+         backgroundImage: 'repeating-linear-gradient(45deg, #3d3d6b 0, #3d3d6b 20px, #2a2a4a 20px, #2a2a4a 40px)'
+       }}>
+    {/* Your content here */}
+  </div>`,
+    isNew: true,
+    type: "simple",
+  },
+  {
+    id: 55,
+    name: "Bubble Pop",
+    category: "dots",
+    css: `background-color: #f0f8ff;
+    background-image: 
+      radial-gradient(circle at 25px 25px, #d1e7ff 20%, transparent 20%), 
+      radial-gradient(circle at 75px 75px, #c3ddff 20%, transparent 20%);
+    background-size: 100px 100px;`,
+    preview: "radial-gradient(circle, #f0f8ff, #c3ddff)",
+    htmlCode: `<div className="min-h-screen w-full relative" 
+       style={{
+         backgroundColor: '#f0f8ff',
+         backgroundImage: 'radial-gradient(circle at 25px 25px, #d1e7ff 20%, transparent 20%), radial-gradient(circle at 75px 75px, #c3ddff 20%, transparent 20%)',
+         backgroundSize: '100px 100px'
+       }}>
+    {/* Your content here */}
+  </div>`,
+    isNew: true,
+    type: "simple",
+  },
+  {
+    id: 56,
+    name: "Blueprint Grid",
+    category: "grid",
+    css: `background-color: #0f172a;
+    background-image: 
+      linear-gradient(white 2px, transparent 2px),
+      linear-gradient(90deg, white 2px, transparent 2px),
+      linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 1px);
+    background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+    background-position:-2px -2px, -2px -2px, -1px -1px, -1px -1px;`,
+    preview: "linear-gradient(135deg, #0f172a, #1e293b)",
+    htmlCode: `<div className="min-h-screen w-full relative" 
+       style={{
+         backgroundColor: '#0f172a',
+         backgroundImage: 'linear-gradient(white 2px, transparent 2px), linear-gradient(90deg, white 2px, transparent 2px), linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 1px)',
+         backgroundSize: '100px 100px, 100px 100px, 20px 20px, 20px 20px',
+         backgroundPosition: '-2px -2px, -2px -2px, -1px -1px, -1px -1px'
+       }}>
+    {/* Your content here */}
+  </div>`,
+    isNew: true,
+    type: "simple",
+  },
 ];
 
 export const categories = [
@@ -1255,8 +1342,8 @@ export const categories = [
   { id: "dots", name: "Dots" },
   { id: "geometric", name: "Geometric" },
   { id: "tech", name: "Tech" },
-  { id: "cosmic", name: "Cosmic" }, // New category
-  { id: "waves", name: "Waves" }, // New category
-  { id: "luxury", name: "Luxury" }, // New category
-  { id: "abstract", name: "Abstract" }, // New category
+  { id: "cosmic", name: "Cosmic" },
+  { id: "waves", name: "Waves" },
+  { id: "luxury", name: "Luxury" },
+  { id: "abstract", name: "Abstract" },
 ];

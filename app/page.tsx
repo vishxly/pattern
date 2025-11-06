@@ -12,8 +12,6 @@ import {
   Check,
 } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
-
 import {
   patterns,
   categories,
@@ -289,16 +287,22 @@ export default function PatternLibrary() {
       });
     }
 
-    // Regular category filtering
+    // Regular category filtering - sort by ID descending (newest first)
+    let filtered: AnyPattern[];
     if (patternType === "background") {
-      return currentCategory === null || currentCategory === "all"
-        ? patterns
-        : patterns.filter((p) => p.category === currentCategory);
+      filtered =
+        currentCategory === null || currentCategory === "all"
+          ? patterns
+          : patterns.filter((p) => p.category === currentCategory);
     } else {
-      return currentCategory === null || currentCategory === "all"
-        ? buttonPatterns
-        : buttonPatterns.filter((p) => p.category === currentCategory);
+      filtered =
+        currentCategory === null || currentCategory === "all"
+          ? buttonPatterns
+          : buttonPatterns.filter((p) => p.category === currentCategory);
     }
+
+    // Sort by ID in descending order (highest ID / newest first)
+    return [...filtered].sort((a, b) => b.id - a.id);
   };
 
   const getCurrentBackground = (): React.CSSProperties => {
