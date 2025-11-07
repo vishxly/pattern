@@ -10,6 +10,8 @@ import {
   MousePointer,
   Trophy,
   Check,
+  Upload,
+  MessageSquare,
 } from "lucide-react";
 
 import {
@@ -21,7 +23,8 @@ import {
 } from "@/components/pattern/patterns";
 import SyntaxHighlighter from "@/components/syntax/syntax-highlighter";
 import { usePatternLikes } from "@/hooks/use-pattern-likes";
-
+import FeedbackModal from "@/components/modals/feedback-modal";
+import PatternSubmissionModal from "@/components/modals/pattern-submission-modal";
 interface ButtonPattern {
   id: number;
   name: string;
@@ -219,6 +222,9 @@ export default function PatternLibrary() {
   // Top patterns state
   const [topPatterns, setTopPatterns] = useState<TopPattern[]>([]);
   const [loadingTopPatterns, setLoadingTopPatterns] = useState(false);
+
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [showSubmissionModal, setShowSubmissionModal] = useState(false);
 
   // Add likes hook
   const {
@@ -465,6 +471,33 @@ export default function PatternLibrary() {
                   )}
                 </button>
               </div>
+            </div>
+            <div className="fixed bottom-8 left-8 z-30 flex flex-col gap-3">
+              {/* Feedback Button */}
+              <button
+                onClick={() => setShowFeedbackModal(true)}
+                className="group flex items-center gap-3 bg-blue-600 hover:bg-blue-700
+               text-white px-6 py-4 rounded-2xl font-medium shadow-md
+               hover:shadow-lg active:scale-[0.97] transition-all duration-300
+               border border-white/10 disabled:opacity-60"
+                title="Send Feedback"
+              >
+                <MessageSquare className="w-5 h-5 transition-transform group-hover:scale-110" />
+                <span className="hidden sm:inline">Feedback</span>
+              </button>
+
+              {/* Submit Pattern Button */}
+              <button
+                onClick={() => setShowSubmissionModal(true)}
+                className="group flex items-center gap-3 bg-purple-600 hover:bg-purple-700
+               text-white px-6 py-4 rounded-2xl font-medium shadow-md
+               hover:shadow-lg active:scale-[0.97] transition-all duration-300
+               border border-white/10 disabled:opacity-60"
+                title="Submit Pattern"
+              >
+                <Upload className="w-5 h-5 transition-transform group-hover:scale-110" />
+                <span className="hidden sm:inline">Submit</span>
+              </button>
             </div>
 
             {/* Main Heading */}
@@ -782,6 +815,14 @@ export default function PatternLibrary() {
 
         <div className="h-24 sm:h-32"></div>
       </div>
+      <FeedbackModal
+        isOpen={showFeedbackModal}
+        onClose={() => setShowFeedbackModal(false)}
+      />
+      <PatternSubmissionModal
+        isOpen={showSubmissionModal}
+        onClose={() => setShowSubmissionModal(false)}
+      />
     </div>
   );
 }

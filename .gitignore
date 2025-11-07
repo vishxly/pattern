@@ -16,11 +16,12 @@
 # next.js
 /.next/
 /out/
-
+/app/admin
+d
 # production
 /build
+/scripts
 
-# misc
 .DS_Store
 *.pem
 

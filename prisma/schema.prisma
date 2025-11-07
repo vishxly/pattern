@@ -32,7 +32,66 @@ model PatternLikeCount {
   @@map("pattern_like_counts")
 }
 
+model Feedback {
+  id              Int      @id @default(autoincrement())
+  name            String
+  email           String
+  message         String   @db.Text
+  rating          Int?     // Optional rating 1-5
+  status          FeedbackStatus @default(PENDING)
+  createdAt       DateTime @default(now()) @map("created_at")
+  
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+  @@map("feedback")
+}
+
+model PatternSubmission {
+  id              Int      @id @default(autoincrement())
+  patternName     String?   @map("pattern_name")  // REQUIRED
+  patternCode     String?   @db.Text @map("pattern_code")  // REQUIRED
+  submitterName   String?  @map("submitter_name")  // OPTIONAL
+  submitterEmail  String?  @map("submitter_email")  // OPTIONAL
+  patternType     PatternType? @default(background) @map("pattern_type")  // OPTIONAL with default
+  category        String?  // OPTIONAL
+  description     String?  @db.Text  // OPTIONAL
+  previewImage    String?  @map("preview_image") @db.Text // OPTIONAL - Base64 or URL
+  status          SubmissionStatus @default(PENDING)
+  adminNotes      String?  @db.Text @map("admin_notes")
+  createdAt       DateTime @default(now()) @map("created_at")
+  reviewedAt      DateTime? @map("reviewed_at")
+  
+  @@index([status])
+  @@index([patternType])
+  @@index([createdAt(sort: Desc)])
+  @@map("pattern_submissions")
+}
+
+model Admin {
+  id              Int      @id @default(autoincrement())
+  username        String   @unique
+  passwordHash    String   @map("password_hash")
+  email           String   @unique
+  createdAt       DateTime @default(now()) @map("created_at")
+  lastLoginAt     DateTime? @map("last_login_at")
+  
+  @@map("admins")
+}
+
 enum PatternType {
   background
   button
+}
+
+enum FeedbackStatus {
+  PENDING
+  REVIEWED
+  RESOLVED
+}
+
+enum SubmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  IMPLEMENTED
 }
